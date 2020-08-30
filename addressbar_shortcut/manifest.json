@@ -1,0 +1,61 @@
+{
+  "name": "Address Bar Shortcut",
+  "description": "Type 's' plus a search term into the Omnibox to open predefined url in new tab.",
+  "version": "1.0",
+  "background": {
+    "scripts": ["background.js","userconfig.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "storage",
+    "bookmarks"
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "omnibox": { "keyword" : "s" },
+  "commands":{
+      "suggestion1": {
+        "suggested_key": {
+          "default": "Alt+1"
+        },
+        "description": "suggestion1",
+        "global": false
+      },
+      "suggestion2": {
+        "suggested_key": {
+          "default": "Alt+2"
+        },
+        "description": "suggestion2",
+        "global": false
+      },
+      "suggestion3": {
+        "suggested_key": {
+          "default": "Alt+3"
+        },
+        "description": "suggestion3",
+        "global": false
+      },
+      "suggestion4": {
+        "suggested_key": {
+          "default": "Alt+4"
+        },
+        "description": "suggestion4",
+        "global": false
+      }
+  },
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": {
+      "16": "addressbar_shortcut16.png",
+      "32": "addressbar_shortcut32.png"
+      }
+  },
+  "icons": {
+    "16": "addressbar_shortcut16.png",
+    "32": "addressbar_shortcut32.png",
+    "48": "addressbar_shortcut48.png",
+    "128": "addressbar_shortcut128.png"
+  }
+}
