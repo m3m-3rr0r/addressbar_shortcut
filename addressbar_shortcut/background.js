@@ -24,13 +24,15 @@ chrome.omnibox.onInputChanged.addListener(
 
     chrome.bookmarks.search(text, function (results) {
       for (let i = 0; i < results.length; i++) {
-        suggestList.push(getSuggestionFromDict(results[i].title, results[i].url))
+        if (results[i].url != undefined) {
+          suggestList.push(getSuggestionFromDict(results[i].title, results[i].url))
+        }
       }
+      console.log(suggestList)
       suggest(suggestList);
       if (suggestList != null && suggestList.length > 0) {
-        let sug = getSuggestionFromDict(suggestList[0])
         chrome.omnibox.setDefaultSuggestion({
-          description:suggestList[0].content
+          description: suggestList[0].content
         })
       }
 
@@ -46,18 +48,18 @@ chrome.commands.onCommand.addListener(function (command) {
   }
 });
 
-chrome.storage.onChanged.addListener(function(changes, namespace) {
+chrome.storage.onChanged.addListener(function (changes, namespace) {
   for (var key in changes) {
     var storageChange = changes[key];
     console.log('Storage key "%s" in namespace "%s" changed. ' +
-                'Old value was "%s", new value is "%s".',
-                key,
-                namespace,
-                storageChange.oldValue,
-                storageChange.newValue);
+      'Old value was "%s", new value is "%s".',
+      key,
+      namespace,
+      storageChange.oldValue,
+      storageChange.newValue);
   }
-  if (changes.hasOwnProperty("predefinedJSON")){
-    if (changes["predefinedJSON"].newValue!=undefined){
+  if (changes.hasOwnProperty("predefinedJSON")) {
+    if (changes["predefinedJSON"].newValue != undefined) {
       predefinedJSON = changes["predefinedJSON"].newValue;
       console.log(predefinedJSON)
     }
@@ -70,10 +72,18 @@ function getSuggestionFromDict(key, value) {
   let des = key + " - " + value;
   return {
     content: value,
-    description: des
+    description: HTMLEncode(des)
   };
 }
 
+//encode url, otherwise will have error: EntityRef: expecting ';'
+function HTMLEncode(html) {
+  var temp = document.createElement("div");
+  (temp.textContent != null) ? (temp.textContent = html) : (temp.innerText = html);
+  var output = temp.innerHTML;
+  temp = null;
+  return output;
+}
 
 commandValue = {
   "suggestion1": 0,
@@ -86,17 +96,18 @@ commandValue = {
 function restore_options() {
   chrome.storage.sync.get({
     predefinedJSON: {},
-  }, function(items) {
-      if(items!=null){
-          console.log(items)
-      }
-      else{
-          console.log("items is null")
-      }
+  }, function (items) {
+    if (items != null) {
+      console.log(items)
+      predefinedJSON = items.predefinedJSON;
+    }
+    else {
+      console.log("items is null")
+    }
   });
 }
 
-function beforeConstruct(){
+function beforeConstruct() {
   restore_options()
 }
 
