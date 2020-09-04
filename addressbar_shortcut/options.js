@@ -1,8 +1,12 @@
 // Saves options to chrome.storage
 function save_options() {
     var textareavalue = document.getElementById('myTextArea').value;
+    let JSONvalue = {};
+    if (textareavalue!=undefined){
+      JSONvalue = JSON.parse(textareavalue)
+    }
     chrome.storage.sync.set({
-      predefinedJSON: textareavalue,
+      predefinedJSON: JSONvalue,
     }, function() {
       // Update status to let user know options were saved.
       var status = document.getElementById('status');
@@ -17,17 +21,17 @@ function save_options() {
   // stored in chrome.storage.
   function restore_options() {
     chrome.storage.sync.get({
-        predefinedJSON: '{}',
+        predefinedJSON: {},
     }, function(items) {
-        if(items!=null){
+        if(items!=undefined){
             console.log(items)
+            document.getElementById('myTextArea').value = JSON.stringify(items.predefinedJSON);
         }
         else{
             console.log("items is null")
         }
         
-      document.getElementById('myTextArea').value = items.predefinedJSON;
-    });
+      });
   }
   document.addEventListener('DOMContentLoaded', restore_options);
   document.getElementById('save').addEventListener('click',

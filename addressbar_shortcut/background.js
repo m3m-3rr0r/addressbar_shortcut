@@ -58,7 +58,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
   }
   if (changes.hasOwnProperty("predefinedJSON")){
     if (changes["predefinedJSON"].newValue!=undefined){
-      predefinedJSON = JSON.parse(changes["predefinedJSON"].newValue);
+      predefinedJSON = changes["predefinedJSON"].newValue;
       console.log(predefinedJSON)
     }
   }
@@ -85,17 +85,14 @@ commandValue = {
 
 function restore_options() {
   chrome.storage.sync.get({
-    predefinedJSON: '{}',
+    predefinedJSON: {},
   }, function(items) {
       if(items!=null){
           console.log(items)
-          predefinedJSON = JSON.parse(items.predefinedJSON);
       }
       else{
           console.log("items is null")
       }
-      
-    console.log(predefinedJSON)
   });
 }
 
