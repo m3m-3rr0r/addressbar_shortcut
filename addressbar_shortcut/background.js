@@ -15,6 +15,7 @@ chrome.omnibox.onInputChanged.addListener(
   function (text, suggest) {
     let re = new RegExp("^" + text);
     suggestList = [];
+    restore_options();
     for (let key in predefinedJSON) {
       let reResult = key.match(re);
       if (reResult != null) {
